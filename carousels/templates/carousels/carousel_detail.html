@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}{{ carousel.title }} | Djanrousel{% endblock %}
+
+{% block extra_css %}
+<style>
+    .carousel-image {
+        max-height: 500px;
+        object-fit: contain;
+    }
+    .carousel-description {
+        background-color: rgba(0,0,0,0.7);
+        padding: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container carousel-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>{{ carousel.title }}</h1>
+        {% if carousel.user == request.user %}
+        <div class="btn-group">
+            <a href="{% url 'carousels:carousel_edit' carousel.id %}" class="btn btn-outline-secondary">Edit Carousel</a>
+            <a href="{% url 'carousels:carousel_delete' carousel.id %}" class="btn btn-outline-danger">Delete</a>
+            <a href="{% url 'carousels:image_add' carousel.id %}" class="btn btn-outline-primary">Add Image</a>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <p class="card-text">
+                <small class="text-muted">Created by {{ carousel.user.username }} on {{ carousel.created_at|date:"F d, Y" }}</small>
+            </p>
+            <p class="card-text">
+                <span class="badge {% if carousel.is_public %}bg-success{% else %}bg-secondary{% endif %}">
+                    {% if carousel.is_public %}Public{% else %}Private{% endif %}
+                </span>
+            </p>
+        </div>
+    </div>
+
+    {% if images %}
+    <div id="carouselMain" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for image in images %}
+            <button type="button" data-bs-target="#carouselMain" data-bs-slide-to="{{ forloop.counter0 }}" 
+                {% if forloop.first %}class="active"{% endif %}></button>
+            {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for image in images %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ image.image.url }}" class="d-block w-100 carousel-image" alt="{{ image.description }}">
+                <div class="carousel-caption d-none d-md-block carousel-description">
+                    <p>{{ image.description }}</p>
+                    {% if carousel.user == request.user %}
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'carousels:image_edit' image.id %}" class="btn btn-outline-light">Edit</a>
+                        <a href="{% url 'carousels:image_delete' image.id %}" class="btn btn-outline-danger">Delete</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselMain" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselMain" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <p>This carousel has no images yet.</p>
+        {% if carousel.user == request.user %}
+        <a href="{% url 'carousels:image_add' carousel.id %}" class="btn btn-primary">Add Image</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <div class="mt-4">
+        <a href="{% url 'carousels:carousel_list' %}" class="btn btn-secondary">Back to Carousels</a>
+    </div>
+</div>
+{% endblock %}

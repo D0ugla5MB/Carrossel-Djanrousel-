@@ -25,7 +25,7 @@ A web app for registered users to create, organize, and share image carousels. I
 
 * **Backend**: Django 5.2.1 (Python 3.11)
 * **Frontend**: Vanilla JS (HTML, CSS)
-* **Database**: Google Cloud SQL (Prod), SQLite (Dev)
+* **Database**: Postgress 17; Google Cloud SQL (Prod), SQLite (Dev)
 * **Image Storage**: Google Cloud Storage
 * **Deployment**: Google Cloud Run
 
@@ -50,9 +50,9 @@ A web app for registered users to create, organize, and share image carousels. I
 
 ## 4. Deployment
 
-* **Platform**: Google Cloud Run for scalable, stateless application hosting.
+* **Platform**: Google Cloud Run (Prod).
 * **Environments**: Separate development (local/cloud) and production (Google Cloud) setups.
-* **Configuration**: Use environment variables for sensitive data, managed via Google Secret Manager or similar.
+* **Configuration**: Use environment variables for sensitive data
 
 ---
 
@@ -60,17 +60,6 @@ A web app for registered users to create, organize, and share image carousels. I
 
 * Input validation (client & server-side).
 * CSRF protection (Django built-in).
-* Password hashing (bcrypt).
+* Secure password hashing (Django's default PBKDF2).
 * HTTPS enforced in production.
 * Regular dependency updates.
-
----
-
-## 6. Getting Started / Local Setup
-
-### Prerequisites
-
-* Python 3.11
-* Django 5.2.1
-* Git
-* (Optional) Google Cloud SDK (for GCS emulator, Cloud SQL Proxy)

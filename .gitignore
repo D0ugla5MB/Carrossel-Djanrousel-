@@ -1,25 +1,53 @@
-# Byte-compiled / optimized / DLL files
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Database files
+*.sqlite3
+*.sqlite3-journal
+
+# Python/Django
 __pycache__/
 *.py[cod]
-*.pyc
-*.pyd
-
-# C extensions
+*$py.class
 *.so
-# Django stuff
-*.log
-db.sqlite3
-db.sqlite3-journal
-local_settings.py
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Static & media files (development)
+media/
 staticfiles/
-mediafiles/
 
-# Environments
-.env
-
-# IDE specific
+# IDE/Editor specific files
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
 
-# SQLite temp files
-*.sqlite3-shm
-*.sqlite3-wal
+# Local development configs
+local_settings.py
+
+# Logs
+*.log
+
+# Credentials
+*.pem
+*.key
+gcp-credentials.json

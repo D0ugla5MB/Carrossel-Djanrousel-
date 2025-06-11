@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Djanrousel - Home{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to Djanrousel</h1>
+    <p class="lead">Create, organize, and share image carousels.</p>
+    <hr class="my-4">
+    <p>Get started by creating your first carousel.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'carousels:carousel_create' %}">Create Carousel</a>
+</div>
+
+{% if carousels %}
+<div class="row mt-4">
+    <div class="col">
+        <h2>Featured Carousels</h2>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+    {% for carousel in carousels %}
+    <div class="col">
+        <div class="card h-100">
+            {% with first_image=carousel.images.first %}
+                {% if first_image %}
+                    <img src="{{ first_image.image.url }}" class="card-img-top" alt="{{ first_image.description }}">
+                {% else %}
+                    <div class="card-img-top bg-light text-center py-5">No images</div>
+                {% endif %}
+            {% endwith %}
+            <div class="card-body">
+                <h5 class="card-title">{{ carousel.title }}</h5>
+                <p class="card-text">
+                    <small class="text-muted">Created by {{ carousel.user.username }} on {{ carousel.created_at|date:"M d, Y" }}</small>
+                </p>
+                <a href="{% url 'carousels:carousel_detail' carousel.id %}" class="btn btn-primary">View Carousel</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

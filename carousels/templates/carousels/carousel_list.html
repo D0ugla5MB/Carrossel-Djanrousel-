@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Your Carousels{% endblock %}
+
+{% block content %}
+<h1>Your Carousels</h1>
+<div class="d-flex justify-content-end mb-4">
+    <a href="{% url 'carousels:carousel_create' %}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Create New Carousel
+    </a>
+</div>
+
+{% if user_carousels %}
+    <h2>Your Carousels</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+        {% for carousel in user_carousels %}
+            <div class="col">
+                <div class="card h-100">
+                    {% with first_image=carousel.images.first %}
+                        {% if first_image %}
+                            <img src="{{ first_image.image.url }}" class="card-img-top" alt="{{ first_image.description }}">
+                        {% else %}
+                            <div class="card-img-top bg-light text-center py-5">No images</div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ carousel.title }}</h5>
+                        <p class="card-text">
+                            <span class="badge {% if carousel.is_public %}bg-success{% else %}bg-secondary{% endif %}">
+                                {% if carousel.is_public %}Public{% else %}Private{% endif %}
+                            </span>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">Created on {{ carousel.created_at|date:"M d, Y" }}</small>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group" role="group" aria-label="Carousel actions">
+                            <a href="{% url 'carousels:carousel_detail' carousel.id %}" class="btn btn-primary btn-sm">View</a>
+                            <a href="{% url 'carousels:carousel_edit' carousel.id %}" class="btn btn-secondary btn-sm">Edit</a>
+                            <a href="{% url 'carousels:carousel_delete' carousel.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <p>You don't have any carousels yet. <a href="{% url 'carousels:carousel_create' %}">Create your first carousel</a>.</p>
+    </div>
+{% endif %}
+
+{% if public_carousels %}
+    <h2>Public Carousels</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for carousel in public_carousels %}
+            <div class="col">
+                <div class="card h-100">
+                    {% with first_image=carousel.images.first %}
+                        {% if first_image %}
+                            <img src="{{ first_image.image.url }}" class="card-img-top" alt="{{ first_image.description }}">
+                        {% else %}
+                            <div class="card-img-top bg-light text-center py-5">No images</div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ carousel.title }}</h5>
+                        <p class="card-text">
+                            <small class="text-muted">Created by {{ carousel.user.username }}</small>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'carousels:carousel_detail' carousel.id %}" class="btn btn-primary btn-sm">View</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if not user_carousels and not public_carousels %}
+    <div class="alert alert-info">
+        <p>There are no carousels available. <a href="{% url 'carousels:carousel_create' %}">Create your first carousel</a>.</p>
+    </div>
+{% endif %}
+{% endblock %}
